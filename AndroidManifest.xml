@@ -1,0 +1,30 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.higheranimals.mycloud"
+    android:versionCode="1"
+    android:versionName="1.0" >
+	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-sdk
+        android:minSdkVersion="7"
+        android:targetSdkVersion="15" />
+
+    <application
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.Sherlock"
+        android:name="com.higheranimals.mycloud.MyCloudApplication" >
+        <activity
+            android:name=".ServiceListActivity"
+            android:label="@string/title_activity_service_list" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AuthenticateActivity"
+            android:label="@string/title_activity_authenticate" >
+        </activity>
+        <service android:name=".PollingService" />
+    </application>
+
+</manifest>
