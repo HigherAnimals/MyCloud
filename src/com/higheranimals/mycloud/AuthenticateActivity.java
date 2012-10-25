@@ -18,6 +18,7 @@ public class AuthenticateActivity extends Activity implements OnClickListener {
 
     private static final String TAG = "AuthenticateActivity";
     private Button button;
+    private Button cancel;
     private EditText usernameField;
     private EditText passwordField;
 
@@ -30,10 +31,11 @@ public class AuthenticateActivity extends Activity implements OnClickListener {
         usernameField = ((EditText) findViewById(R.id.username));
         passwordField = ((EditText) findViewById(R.id.password));
         button = (Button) findViewById(R.id.auth_submit);
+        cancel = (Button) findViewById(R.id.auth_cancel);
 
         // Set listeners.
         button.setOnClickListener(this);
-        ((Button) findViewById(R.id.auth_cancel)).setOnClickListener(this);
+        cancel.setOnClickListener(this);
     }
 
     public void enableViews(boolean enable) {
@@ -41,6 +43,7 @@ public class AuthenticateActivity extends Activity implements OnClickListener {
         usernameField.setEnabled(enable);
         passwordField.setEnabled(enable);
         button.setEnabled(enable);
+        cancel.setEnabled(enable);
     }
 
     @Override
@@ -128,6 +131,14 @@ public class AuthenticateActivity extends Activity implements OnClickListener {
             Intent intent = new Intent(activity, PollingService.class);
             intent.putExtra("authResponse", response);
             activity.startService(intent);
+
+            // Saving auth info.
+            ((MyCloudApplication) getApplication()).setAuthInfo(username,
+                    password);
+
+            // Exit with success.
+            setResult(1);
+            finish();
         }
     }
 }
