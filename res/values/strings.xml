@@ -13,5 +13,6 @@
     <string name="title_activity_authenticate">Authenticate</string>
     <string name="auth_failed">The username or password you entered is incorrect. Please try again.</string>
     <string name="network_failed">There has been a network failure. Please try again later.</string>
+    <string name="no_services">No services</string>
 
 </resources>

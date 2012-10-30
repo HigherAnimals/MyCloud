@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.higheranimals.mycloud.data.Authenticator;
 import com.higheranimals.mycloud.network.AuthenticationException;
 import com.higheranimals.mycloud.network.NetworkException;
-import com.higheranimals.mycloud.network.NetworkUtilities;
 
 public class AuthenticateActivity extends Activity implements OnClickListener {
 
@@ -76,7 +76,7 @@ public class AuthenticateActivity extends Activity implements OnClickListener {
         new AuthAsyncTask(this, username, password).execute();
     }
 
-    private class AuthAsyncTask extends AsyncTask<Void, Void, String> {
+    private class AuthAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String username;
         private final String password;
@@ -97,10 +97,11 @@ public class AuthenticateActivity extends Activity implements OnClickListener {
         }
 
         @Override
-        protected String doInBackground(Void... params) {
+        protected Boolean doInBackground(Void... params) {
             // TODO Clean this up.
             try {
-                return NetworkUtilities.getAuth(username, password);
+                Authenticator.authenticate(activity, username, password);
+                return true;
             } catch (AuthenticationException e) {
                 error = getString(R.string.auth_failed);
                 // TODO Auto-generated catch block
@@ -110,17 +111,17 @@ public class AuthenticateActivity extends Activity implements OnClickListener {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            return null;
+            return false;
         }
 
         @Override
-        protected void onPostExecute(String response) {
+        protected void onPostExecute(Boolean result) {
 
             // Re-enable views.
             activity.enableViews(true);
 
             // Show error and exit, if necessary.
-            if (response == null) {
+            if (!result) {
                 if (error != null) {
                     Toast.makeText(activity, error, Toast.LENGTH_LONG).show();
                 }
@@ -129,7 +130,6 @@ public class AuthenticateActivity extends Activity implements OnClickListener {
 
             // Start polling service.
             Intent intent = new Intent(activity, PollingService.class);
-            intent.putExtra("authResponse", response);
             activity.startService(intent);
 
             // Saving auth info.

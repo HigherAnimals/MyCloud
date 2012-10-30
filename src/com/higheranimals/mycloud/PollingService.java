@@ -1,13 +1,8 @@
 package com.higheranimals.mycloud;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 public class PollingService extends Service {
 
@@ -30,22 +25,6 @@ public class PollingService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        String authResponse = intent.getStringExtra("authResponse");
-        Log.v(TAG, "onStartCommand");
-        if (authResponse != null) {
-            try {
-                JSONObject authJson = new JSONObject(authResponse);
-                JSONArray serviceCatalog = authJson.getJSONObject("access")
-                        .getJSONArray("serviceCatalog");
-                for (int i = 0; i < serviceCatalog.length(); i++) {
-                    JSONObject service = serviceCatalog.getJSONObject(i);
-                    Log.v(TAG, service.toString());
-                }
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
         return START_STICKY;
     }
 
